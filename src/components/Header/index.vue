@@ -68,6 +68,7 @@ export default {
         params: { keyword: this.keyword === "" ? undefined : this.keyword },
         query: { keyword2: this.keyword.toUpperCase() },
       });
+
     },
   },
 };
