@@ -51,7 +51,8 @@
 
 <script>
 import { mapState } from "vuex";
-import _ from "lodash";
+// import _ from "lodash";
+import throttle from "lodash/throttle";
 export default {
   name: "TypeNav",
   data() {
@@ -68,7 +69,7 @@ export default {
     }),
   },
   methods: {
-    showSubCategorys: _.throttle(function(index) {
+    showSubCategorys: throttle(function(index) {
       // console.log(index);
       this.currentIndex = index;
     }, 300),
