@@ -2,7 +2,7 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="currentIndex = -1">
+      <div @mouseleave="currentIndex = -2" @mouseenter="currentIndex = -1">
         <h2 class="all">全部商品分类</h2>
         <div class="sort">
           <div class="all-sort-list2">
@@ -57,7 +57,7 @@ export default {
   name: "TypeNav",
   data() {
     return {
-      currentIndex: -1,
+      currentIndex: -2,
     };
   },
   mounted() {
@@ -71,6 +71,7 @@ export default {
   methods: {
     showSubCategorys: throttle(function(index) {
       // console.log(index);
+      if (this.currentIndex === -2) return;
       this.currentIndex = index;
     }, 300),
   },
