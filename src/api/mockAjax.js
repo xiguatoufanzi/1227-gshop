@@ -6,7 +6,7 @@ import "nprogress/nprogress.css";
 NProgress.configure({ showSpinner: false });
 
 const instance = axios.create({
-  baseURL: "/api",
+  baseURL: "/mock",
   timeout: 15000,
 });
 

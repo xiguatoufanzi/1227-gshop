@@ -3,6 +3,7 @@
 每个函数的返回值都是promise
 */
 import ajax from "./ajax";
+import mockAjax from "./mockAjax";
 
 /* 
 请求获取3级分类列表
@@ -28,3 +29,6 @@ export function reqLogin(mobile, password) {
     data: { mobile, password },
   });
 }
+
+export const reqBanners = () => mockAjax("/banners");
+export const reqFloors = () => mockAjax("/floors");

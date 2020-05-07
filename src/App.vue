@@ -10,6 +10,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 // import { reqBaseCategoryList, reqLogin } from "@/api";
+import { reqFloors } from "@/api";
 
 export default {
   name: "App",
@@ -25,6 +26,9 @@ export default {
     // console.log("result2", result2);
 
     this.$store.dispatch("getBaseCategoryList");
+
+    const result = await reqFloors();
+    console.log("mock result ", result);
   },
 };
 </script>
