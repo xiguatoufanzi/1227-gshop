@@ -2,19 +2,26 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <div class="container">
-      <div @mouseleave="currentIndex = -2" @mouseenter="currentIndex = -1">
+      <div @mouseleave="hideCategorys" @mouseenter="showCategorys">
         <h2 class="all">全部商品分类</h2>
-        <div class="sort">
-          <div class="all-sort-list2">
-            <div
-              class="item"
-              v-for="(c1, index) in categoryList"
-              :key="c1.id"
-              :class="{ item_on: index === currentIndex }"
-              @mouseenter="showSubCategorys(index)"
-            >
-              <h3>
-                <a
+        <transition name="move">
+          <div class="sort" v-show="isShowFirst">
+            <div class="all-sort-list2" @click="toSearch">
+              <div
+                class="item"
+                v-for="(c1, index) in categoryList"
+                :key="c1.id"
+                :class="{ item_on: index === currentIndex }"
+                @mouseenter="showSubCategorys(index)"
+              >
+                <h3>
+                  <a
+                    href="javascript:;"
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                    >{{ c1.categoryName }}</a
+                  >
+                  <!-- <a
                   href="javascript:;"
                   @click="
                     $router.push(
@@ -22,19 +29,29 @@
                     )
                   "
                   >{{ c1.categoryName }}</a
-                >
-                <!-- <router-link
+                > -->
+                  <!-- <router-link
                   :to="
                     `/search?categoryName=${c1.categoryName}&category1Id=${c1.categoryId}`
                   "
                   >{{ c1.categoryName }}</router-link
                 > -->
-              </h3>
-              <div class="item-list clearfix">
-                <div class="subitem">
-                  <dl class="fore" v-for="c2 in c1.categoryChild" :key="c2.id">
-                    <dt>
-                      <a
+                </h3>
+                <div class="item-list clearfix">
+                  <div class="subitem">
+                    <dl
+                      class="fore"
+                      v-for="c2 in c1.categoryChild"
+                      :key="c2.id"
+                    >
+                      <dt>
+                        <a
+                          href="javascript:;"
+                          :data-categoryName="c2.categoryName"
+                          :data-category2Id="c2.categoryId"
+                          >{{ c2.categoryName }}</a
+                        >
+                        <!-- <a
                         href="javascript:;"
                         @click="
                           $router.push(
@@ -42,17 +59,23 @@
                           )
                         "
                         >{{ c2.categoryName }}</a
-                      >
-                      <!-- <router-link
+                      > -->
+                        <!-- <router-link
                         :to="
                           `/search?categoryName=${c2.categoryName}&category2Id=${c2.categoryId}`
                         "
                         >{{ c2.categoryName }}</router-link
                       > -->
-                    </dt>
-                    <dd>
-                      <em v-for="c3 in c2.categoryChild" :key="c3.id">
-                        <a
+                      </dt>
+                      <dd>
+                        <em v-for="c3 in c2.categoryChild" :key="c3.id">
+                          <a
+                            href="javascript:;"
+                            :data-categoryName="c3.categoryName"
+                            :data-category3Id="c3.categoryId"
+                            >{{ c3.categoryName }}</a
+                          >
+                          <!-- <a
                           href="javascript:;"
                           @click="
                             $router.push(
@@ -60,21 +83,22 @@
                             )
                           "
                           >{{ c3.categoryName }}</a
-                        >
-                        <!-- <router-link
+                        > -->
+                          <!-- <router-link
                           :to="
                             `/search?categoryName=${c3.categoryName}&category3Id=${c3.categoryId}`
                           "
                           >{{ c3.categoryName }}</router-link
                         > -->
-                      </em>
-                    </dd>
-                  </dl>
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
 
       <nav class="nav">
@@ -100,7 +124,11 @@ export default {
   data() {
     return {
       currentIndex: -2,
+      isShowFirst: true,
     };
+  },
+  beforeMount() {
+    this.isShowFirst = this.$route.path === "/";
   },
   mounted() {
     this.$store.dispatch("getBaseCategoryList");
@@ -116,6 +144,44 @@ export default {
       if (this.currentIndex === -2) return;
       this.currentIndex = index;
     }, 300),
+    toSearch(event) {
+      const {
+        categoryname,
+        category1id,
+        category2id,
+        category3id,
+      } = event.target.dataset;
+
+      if (categoryname) {
+        let query = {
+          categoryName: categoryname,
+        };
+        if (category1id) {
+          query.category1Id = category1id;
+        } else if (category2id) {
+          query.category2Id = category2id;
+        } else if (category3id) {
+          query.category3Id = category3id;
+        }
+        //跳转到search
+        this.$router.push({
+          name: "search",
+          query,
+        });
+      }
+    },
+    //显示一级列表
+    showCategorys() {
+      this.currentIndex = -1;
+      this.isShowFirst = true;
+    },
+    //隐藏
+    hideCategorys() {
+      this.currentIndex = -2;
+      if (this.$route.path !== "/") {
+        this.isShowFirst = false;
+      }
+    },
   },
 };
 </script>
@@ -160,6 +226,14 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
+
+      &.move-enter-active {
+        transition: all 0.5s;
+      }
+      &.move-enter {
+        opacity: 0;
+        height: 0;
+      }
 
       .all-sort-list2 {
         .item {
