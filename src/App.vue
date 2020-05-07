@@ -18,12 +18,14 @@ export default {
     Header,
     Footer,
   },
-  // async mounted() {
-  //   const result = await reqBaseCategoryList();
-  //   console.log("result", result);
-  //   const result2 = await reqLogin("13700000000", "111111");
-  //   console.log("result2", result2);
-  // },
+  async mounted() {
+    // const result = await reqBaseCategoryList();
+    // console.log("result", result);
+    // const result2 = await reqLogin("13700000000", "111111");
+    // console.log("result2", result2);
+
+    this.$store.dispatch("getBaseCategoryList");
+  },
 };
 </script>
 

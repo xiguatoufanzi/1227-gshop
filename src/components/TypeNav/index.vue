@@ -130,9 +130,10 @@ export default {
   beforeMount() {
     this.isShowFirst = this.$route.path === "/";
   },
-  mounted() {
+  //会导致频繁发请求
+  /* mounted() {
     this.$store.dispatch("getBaseCategoryList");
-  },
+  }, */
   computed: {
     ...mapState({
       categoryList: (state) => state.home.baseCategoryList,
@@ -163,13 +164,21 @@ export default {
         } else if (category3id) {
           query.category3Id = category3id;
         }
-        //跳转到search
-        this.$router.push({
+        //路由跳转对象
+        let location = {
           name: "search",
           query,
-        });
+        };
+        const { keyword } = this.$route.params;
+        if (keyword) {
+          location.params = { keyword };
+        }
+        //跳转到search
+        this.$router.push(location);
+        this.hideCategorys();
       }
     },
+
     //显示一级列表
     showCategorys() {
       this.currentIndex = -1;
