@@ -5,8 +5,7 @@
     <TodayRecommend />
     <Rank />
     <Like />
-    <Floor />
-    <Floor />
+    <Floor v-for="floor in floors" :key="floor.id" :floor="floor" />
     <Brand />
   </div>
 </template>
@@ -18,6 +17,7 @@ import Rank from "./Rank/Rank";
 import Like from "./Like/Like";
 import Floor from "./Floor/Floor";
 import Brand from "./Brand/Brand";
+import { mapState } from "vuex";
 export default {
   name: "Home",
   components: {
@@ -27,6 +27,16 @@ export default {
     Like,
     Floor,
     Brand,
+  },
+  mounted() {
+    //请求轮播和楼层的数据
+    this.$store.dispatch("getBanners");
+    this.$store.dispatch("getFloors");
+  },
+  computed: {
+    ...mapState({
+      floors: (state) => state.home.floors,
+    }),
   },
 };
 </script>

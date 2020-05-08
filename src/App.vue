@@ -31,8 +31,7 @@ export default {
     // const result = await reqFloors();
     // console.log("mock result ", result);
 
-    this.$store.dispatch("getBanners");
-    this.$store.dispatch("getFloors");
+    
   },
 };
 </script>
