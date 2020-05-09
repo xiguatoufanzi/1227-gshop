@@ -464,6 +464,26 @@ export default {
   components: {
     SearchSelector,
   },
+  data() {
+    return {
+      options: {
+        category1Id: "", // 一级分类ID
+        category2Id: "", // 二级分类ID
+        category3Id: "", // 三级分类ID
+        categoryName: "", // 分类名称
+        keyword: "", // 关键字
+        trademark: "", // 品牌  "ID:品牌名称"
+        props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] 示例: ["2:6.0～6.24英寸:屏幕尺寸"]
+        order: "1:desc", // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  示例: "1:desc"
+        pageNo: 1, // 当前页码
+        pageSize: 10, // 每页数量
+      },
+    };
+  },
+
+  mounted() {
+    this.$store.dispatch("getProductList", this.options);
+  },
 };
 </script>
 
