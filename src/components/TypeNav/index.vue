@@ -174,7 +174,12 @@ export default {
           location.params = { keyword };
         }
         //跳转到search
-        this.$router.push(location);
+        // this.$router.push(location);
+        if (this.$route.name === "search") {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
         this.hideCategorys();
       }
     },

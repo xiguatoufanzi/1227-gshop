@@ -61,6 +61,11 @@ export default {
       keyword: "",
     };
   },
+  mounted() {
+    this.$bus.$on("removeKeyword", () => {
+      this.keyword = "";
+    });
+  },
   methods: {
     search() {
       // this.$router.push(`/search/${this.searchName}`);
@@ -73,7 +78,12 @@ export default {
       }
       const { query } = this.$route;
       location.query = query;
-      this.$router.push(location);
+
+      if (this.$route.name === "search") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
   },
 };

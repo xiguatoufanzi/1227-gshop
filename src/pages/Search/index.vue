@@ -180,17 +180,19 @@ export default {
       this.options.category2Id = "";
       this.options.category3Id = "";
       //   this.$store.dispatch("getProductList", this.options);
-      this.$router.push(this.$route.path);
+      this.$router.replace(this.$route.path);
     },
 
     //移出关键字
     removeKeyword() {
       this.options.keyword = "";
-      this.$store.dispatch("getProductList", this.options);
-      this.$router.push({
-        name: search,
+      //   this.$store.dispatch("getProductList", this.options);
+      this.$router.replace({
+        name: "search",
         query: this.$route.query,
       });
+
+      this.$bus.$emit("removeKeyword");
     },
 
     updateOptions() {
