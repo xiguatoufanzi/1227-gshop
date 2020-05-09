@@ -153,8 +153,41 @@ export default {
     }),
   },
 
+  watch: {
+    $route() {
+      this.updateOptions();
+      // 请求获取数据
+      this.$store.dispatch("getProductList", this.options);
+    },
+  },
+
+  beforeMount() {
+    this.updateOptions();
+  },
+
   mounted() {
     this.$store.dispatch("getProductList", this.options);
+  },
+
+  methods: {
+    updateOptions() {
+      const {
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      } = this.$route.query;
+      const { keyword } = this.$route.params;
+
+      this.options = {
+        ...this.options,
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+        keyword,
+      };
+    },
   },
 };
 </script>
