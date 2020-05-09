@@ -11,10 +11,13 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <!-- 分类关键字删除 -->
+            <li class="with-x" v-if="options.categoryName">
+              {{ options.categoryName }}<i @click="removeCategory">×</i>
+            </li>
+            <li class="with-x" v-if="options.keyword">
+              {{ options.keyword }}<i @click="removeKeyword">×</i>
+            </li>
           </ul>
         </div>
         <!-- 选择条件 -->
@@ -170,6 +173,26 @@ export default {
   },
 
   methods: {
+    //移出分类条件
+    removeCategory() {
+      this.options.categoryName = "";
+      this.options.category1Id = "";
+      this.options.category2Id = "";
+      this.options.category3Id = "";
+      //   this.$store.dispatch("getProductList", this.options);
+      this.$router.push(this.$route.path);
+    },
+
+    //移出关键字
+    removeKeyword() {
+      this.options.keyword = "";
+      this.$store.dispatch("getProductList", this.options);
+      this.$router.push({
+        name: search,
+        query: this.$route.query,
+      });
+    },
+
     updateOptions() {
       const {
         categoryName,

@@ -38,6 +38,7 @@
             id="autocomplete"
             class="input-error input-xxlarge"
             v-model="keyword"
+            placeholder="关键字"
           />
           <button
             class="sui-btn btn-xlarge btn-danger"
@@ -57,7 +58,7 @@ export default {
   name: "Header",
   data() {
     return {
-      keyword: "aaabb",
+      keyword: "",
     };
   },
   methods: {
