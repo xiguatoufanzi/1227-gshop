@@ -40,11 +40,7 @@
             v-model="keyword"
             placeholder="关键字"
           />
-          <button
-            class="sui-btn btn-xlarge btn-danger"
-            type="button"
-            @click="search"
-          >
+          <button class="sui-btn btn-xlarge btn-danger" @click.prevent="search">
             搜索
           </button>
         </form>

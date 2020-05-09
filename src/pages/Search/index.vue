@@ -18,10 +18,20 @@
             <li class="with-x" v-if="options.keyword">
               {{ options.keyword }}<i @click="removeKeyword">×</i>
             </li>
+            <li class="with-x" v-if="options.trademark">
+              {{ options.trademark }}<i @click="removeTrademark">×</i>
+            </li>
+            <li
+              class="with-x"
+              v-for="(prop, index) in options.props"
+              :key="prop"
+            >
+              {{ prop }}<i @click="removeProp(index)">×</i>
+            </li>
           </ul>
         </div>
         <!-- 选择条件 -->
-        <SearchSelector />
+        <SearchSelector :setTrademark="setTrademark" :addProp="addProp" />
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
@@ -173,6 +183,30 @@ export default {
   },
 
   methods: {
+    //设置品牌条件数据
+    setTrademark(trademark) {
+      this.options.trademark = trademark;
+      this.$store.dispatch("getProductList", this.options);
+    },
+    //删除品牌数据
+    removeTrademark() {
+      this.options.trademark = "";
+      this.$store.dispatch("getProductList", this.options);
+    },
+
+    //添加属性条件
+    addProp(attrId, value, attrName) {
+      const prop = `${attrId}:${value}:${attrName}`;
+      if (this.options.props.indexOf(prop) !== -1) return;
+      this.options.props.push(prop);
+      this.$store.dispatch("getProductList", this.options);
+    },
+    //删除属性条件
+    removeProp(index) {
+      this.options.props.splice(index, 1);
+      this.$store.dispatch("getProductList", this.options);
+    },
+
     //移出分类条件
     removeCategory() {
       this.options.categoryName = "";
