@@ -109,35 +109,13 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination
+            :currentPage="options.pageNo"
+            :pageSize="options.pageSize"
+            :total="productList.total"
+            :showPageNo="3"
+            @currentChange="handlCurrentChange"
+          />
         </div>
       </div>
     </div>
@@ -166,7 +144,7 @@ export default {
         props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] 示例: ["2:6.0～6.24英寸:屏幕尺寸"]
         order: "1:desc", // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  示例: "1:desc"
         pageNo: 1, // 当前页码
-        pageSize: 10, // 每页数量
+        pageSize: 5, // 每页数量
       },
     };
   },
@@ -197,10 +175,23 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("getProductList", this.options);
+    this.getProductList();
   },
 
   methods: {
+    //异步获取指定页码的分页商品数据,默认指定第1页
+    getProductList(pageNo = 1) {
+      this.options.pageNo = pageNo;
+      this.$store.dispatch("getProductList", this.options);
+    },
+
+    //改变页码时的回调
+    handlCurrentChange(currentPage) {
+      // 更新options中pageNo
+      this.options.pageNo = currentPage;
+      this.$store.dispatch("getProductList", this.options);
+    },
+
     //是否为当前选择项
     isActive(orderFlag) {
       return this.options.order.indexOf(orderFlag) === 0;
@@ -217,7 +208,7 @@ export default {
       }
       // 设置新的order值
       this.options.order = orderFlag + ":" + orderType;
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
 
     //设置品牌条件数据
@@ -229,13 +220,13 @@ export default {
       } else {
         this.options.trademark = trademark;
       }
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
     //删除品牌数据
     removeTrademark() {
       // this.options.trademark = "";
       this.$delete(this.options, "trademark");
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
 
     //添加属性条件
@@ -243,12 +234,12 @@ export default {
       const prop = `${attrId}:${value}:${attrName}`;
       if (this.options.props.indexOf(prop) !== -1) return;
       this.options.props.push(prop);
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
     //删除属性条件
     removeProp(index) {
       this.options.props.splice(index, 1);
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
 
     //移出分类条件
