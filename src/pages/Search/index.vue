@@ -37,8 +37,15 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isActive('1') }" @click="setOrder('1')">
+                  <a href="javascript:;"
+                    >综合
+                    <i
+                      class="iconfont"
+                      :class="orderIcon"
+                      v-if="isActive('1')"
+                    ></i>
+                  </a>
                 </li>
                 <li>
                   <a href="#">销量</a>
@@ -49,11 +56,15 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isActive('2') }" @click="setOrder('2')">
+                  <a href="javascript:;"
+                    >价格
+                    <i
+                      class="iconfont"
+                      :class="orderIcon"
+                      v-if="isActive('2')"
+                    ></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -151,7 +162,7 @@ export default {
         category3Id: "", // 三级分类ID
         categoryName: "", // 分类名称
         keyword: "", // 关键字
-        trademark: "", // 品牌  "ID:品牌名称"
+        // trademark: "", // 品牌  "ID:品牌名称"
         props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] 示例: ["2:6.0～6.24英寸:屏幕尺寸"]
         order: "1:desc", // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  示例: "1:desc"
         pageNo: 1, // 当前页码
@@ -164,6 +175,13 @@ export default {
     ...mapState({
       productList: (state) => state.search.productList,
     }),
+
+    //icon类名
+    orderIcon() {
+      return this.options.order.split(":")[1] === "desc"
+        ? "icondown"
+        : "iconup";
+    },
   },
 
   watch: {
@@ -183,14 +201,40 @@ export default {
   },
 
   methods: {
+    //是否为当前选择项
+    isActive(orderFlag) {
+      return this.options.order.indexOf(orderFlag) === 0;
+    },
+    //点击排序
+    setOrder(flag) {
+      let [orderFlag, orderType] = this.options.order.split(":");
+      // 点击当前排序项: 切换排序方式
+      if (flag === orderFlag) {
+        orderType = orderType === "desc" ? "asc" : "desc";
+      } else {
+        orderFlag = flag;
+        orderType = "desc";
+      }
+      // 设置新的order值
+      this.options.order = orderFlag + ":" + orderType;
+      this.$store.dispatch("getProductList", this.options);
+    },
+
     //设置品牌条件数据
     setTrademark(trademark) {
-      this.options.trademark = trademark;
+      // this.options.trademark = trademark;
+      // 如果options中没有trademark属性, 必须通过set来添加
+      if (!this.options.hasOwnProperty("trademark")) {
+        this.$set(this.options, "trademark", trademark);
+      } else {
+        this.options.trademark = trademark;
+      }
       this.$store.dispatch("getProductList", this.options);
     },
     //删除品牌数据
     removeTrademark() {
-      this.options.trademark = "";
+      // this.options.trademark = "";
+      this.$delete(this.options, "trademark");
       this.$store.dispatch("getProductList", this.options);
     },
 

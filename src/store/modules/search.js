@@ -20,7 +20,16 @@ const actions = {
   },
 };
 
-const getters = {};
+const getters = {
+  trademarkList(state) {
+    // 当前模块的state
+    return state.productList.trademarkList || [];
+  },
+
+  attrsList(state) {
+    return state.productList.attrsList || [];
+  },
+};
 
 export default {
   state,

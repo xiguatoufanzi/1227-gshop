@@ -14,7 +14,7 @@ const instance = axios.create({
 
 // axios请求拦截器
 instance.interceptors.request.use((config) => {
-  console.log("请求拦截器成功执行");
+  // console.log("请求拦截器成功执行");
   /* 2. 显示请求进度条 */
   NProgress.start();
   return config;
@@ -22,7 +22,7 @@ instance.interceptors.request.use((config) => {
 // axios响应截器
 instance.interceptors.response.use(
   (response) => {
-    console.log("响应拦截器成功执行");
+    // console.log("响应拦截器成功执行");
     /* 2.2. 请求成功结束 隐藏进度条 */
     NProgress.done();
     /*  3. 成功返回的数据不再是response, 而直接是响应体数据response.data */

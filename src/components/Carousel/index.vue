@@ -25,7 +25,7 @@ export default {
   watch: {
     carouselList: {
       handler(value) {
-        console.log("watch carouselList", value.length);
+        // console.log("watch carouselList", value.length);
         if (value.length > 0) {
           this.$nextTick(() => {
             this.initSwiper();
