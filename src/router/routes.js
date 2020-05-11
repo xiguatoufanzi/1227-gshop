@@ -2,6 +2,7 @@ import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Search from "@/pages/Search";
+import Detail from "@/pages/Detail";
 
 export default [
   //home
@@ -16,6 +17,12 @@ export default [
     meta: {
       isHideFooter: true,
     },
+  },
+  //详情
+  {
+    name: "detail",
+    path: "/detail/:id",
+    component: Detail,
   },
   //注册
   {
