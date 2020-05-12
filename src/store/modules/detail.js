@@ -34,10 +34,16 @@ const getters = {
   },
 
   //图片列表
-  skuImageList(state){
+  skuImageList(state) {
     const skuInfo = state.detailInfo.skuInfo;
-    return skuInfo ? skuInfo.skuImageList : []
-  }
+    return skuInfo ? skuInfo.skuImageList : [];
+  },
+
+  //销售属性
+  spuSaleAttrList(state) {
+    const spuSaleAttrList = state.detailInfo.spuSaleAttrList;
+    return spuSaleAttrList || [];
+  },
 };
 
 export default {

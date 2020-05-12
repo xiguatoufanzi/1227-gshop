@@ -79,29 +79,19 @@
           <div class="choose">
             <div class="chooseArea">
               <div class="choosed"></div>
-              <dl>
-                <dt class="title">选择颜色</dt>
-                <dd changepirce="0" class="active">金色</dd>
-                <dd changepirce="40">银色</dd>
-                <dd changepirce="90">黑色</dd>
-              </dl>
-              <dl>
-                <dt class="title">内存容量</dt>
-                <dd changepirce="0" class="active">16G</dd>
-                <dd changepirce="300">64G</dd>
-                <dd changepirce="900">128G</dd>
-                <dd changepirce="1300">256G</dd>
-              </dl>
-              <dl>
-                <dt class="title">选择版本</dt>
-                <dd changepirce="0" class="active">公开版</dd>
-                <dd changepirce="-1000">移动版</dd>
-              </dl>
-              <dl>
-                <dt class="title">购买方式</dt>
-                <dd changepirce="0" class="active">官方标配</dd>
-                <dd changepirce="-240">优惠移动版</dd>
-                <dd changepirce="-390">电信优惠版</dd>
+              <dl v-for="(attr, index) in spuSaleAttrList" :key="index">
+                <dt class="title">
+                  {{ attr.saleAttrName }}
+                </dt>
+                <dd
+                  changepirce="0"
+                  v-for="(item, index) in attr.spuSaleAttrValueList"
+                  :key="index"
+                  :class="{ active: +item.isChecked }"
+                  @click="changeChecked(item, attr.spuSaleAttrValueList)"
+                >
+                  {{ item.saleAttrValueName }}
+                </dd>
               </dl>
             </div>
             <div class="cartWrap">
@@ -376,6 +366,7 @@ export default {
   data() {
     return {
       currentIndex: 0,
+      //销售选中
     };
   },
 
@@ -387,12 +378,25 @@ export default {
     ...mapState({
       detailInfo: (state) => state.detail.detailInfo,
     }),
-    ...mapGetters(["categoryView", "skuInfo", "skuImageList"]),
+    ...mapGetters([
+      "categoryView",
+      "skuInfo",
+      "skuImageList",
+      "spuSaleAttrList",
+    ]),
   },
 
   methods: {
     handleCurrentChange(index) {
       this.currentIndex = index;
+    },
+
+    //改变销售选项
+    changeChecked(item, attrs) {
+      attrs.forEach((value) => {
+        value.isChecked = 0;
+      });
+      item.isChecked = 1;
     },
   },
 };
