@@ -33,7 +33,7 @@ export default {
       // mask的宽度
       const maskWidth = this.$refs.mask.clientWidth;
       // const maskWidth = this.maskWidth;
-
+      // console.log(maskWidth);
       // 计算left
       left = offsetX - maskWidth / 2;
       if (left < 0) {

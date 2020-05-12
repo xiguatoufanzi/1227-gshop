@@ -57,3 +57,10 @@ export const reqProductList = (searchParams) =>
 /api/item/{ skuId }
 */
 export const reqProduct = (skuId) => ajax(`item/${skuId}`);
+
+/* 
+添加到购物车
+/api/cart/addToCart/{ skuId }/{ skuNum }
+*/
+export const reqAddToCart = (skuId, skuNum) =>
+  ajax.post(`/cart/addToCart/${skuId}/${skuNum}`);

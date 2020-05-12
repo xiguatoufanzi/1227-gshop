@@ -96,12 +96,17 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" class="itxt" v-model="skuNum" />
+                <a href="javascript:" class="plus" @click="skuNum++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="skuNum = skuNum > 1 ? skuNum - 1 : 1"
+                  >-</a
+                >
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addToCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -366,7 +371,8 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      //销售选中
+      //添加购物车数量
+      skuNum: 1,
     };
   },
 
@@ -397,6 +403,49 @@ export default {
         value.isChecked = 0;
       });
       item.isChecked = 1;
+    },
+
+    async addToCart() {
+      // 取出商品的id与数量
+      const skuId = this.$route.params.skuId;
+      const skuNum = this.skuNum;
+      /*  this.$store.dispatch("addToCart", {
+        skuId,
+        skuNum,
+        callback: this.callback,
+      }); */
+
+      //实现方式2: 利用dispatch()的promise返回值
+      /* const errorMsg = await this.$store.dispatch("addToCart2", {
+        skuId,
+        skuNum,
+      });
+      if (errorMsg) {
+        // 如果有值, 说明添加失败了
+        alert(errorMsg);
+      } else {
+        alert("添加成功, 准备自动跳转到成功的界面");
+      } */
+
+      //实现方式2.2: 利用dispatch()的promise返回值
+      try {
+        await this.$store.dispatch("addToCart3", {
+          skuId,
+          skuNum,
+        });
+        alert("添加成功, 准备自动跳转到成功的界面");
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+
+    callback(errorMsg) {
+      if (errorMsg) {
+        // 如果有值, 说明添加失败了
+        alert(errorMsg);
+      } else {
+        alert("添加成功, 准备自动跳转到成功的界面");
+      }
     },
   },
 };
