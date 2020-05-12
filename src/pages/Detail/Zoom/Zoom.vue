@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import throttle from "lodash/throttle";
 export default {
   name: "Zoom",
   props: {
@@ -20,7 +21,7 @@ export default {
   },
 
   methods: {
-    move(event) {
+    move: throttle(function(event) {
       //初始化
       let left = 0;
       let top = 0;
@@ -28,10 +29,10 @@ export default {
       // 取出相关数据
       // 事件的坐标(相对于事件源div的左上角)
       const { offsetX, offsetY } = event;
-      console.log(offsetX, offsetY);
+      // console.log(offsetX, offsetY);
       // mask的宽度
-      // const maskWidth = this.$refs.mask.clientWidth;
-      const maskWidth = this.maskWidth;
+      const maskWidth = this.$refs.mask.clientWidth;
+      // const maskWidth = this.maskWidth;
 
       // 计算left
       left = offsetX - maskWidth / 2;
@@ -57,7 +58,7 @@ export default {
       const bigImg = this.$refs.big;
       bigImg.style.left = -2 * left + "px";
       bigImg.style.top = -2 * top + "px";
-    },
+    }, 20),
   },
 
   mounted() {
