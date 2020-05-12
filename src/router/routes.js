@@ -21,7 +21,7 @@ export default [
   //详情
   {
     name: "detail",
-    path: "/detail/:id",
+    path: "/detail/:skuId",
     component: Detail,
   },
   //注册
