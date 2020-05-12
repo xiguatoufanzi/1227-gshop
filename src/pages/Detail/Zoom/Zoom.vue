@@ -31,8 +31,8 @@ export default {
       const { offsetX, offsetY } = event;
       // console.log(offsetX, offsetY);
       // mask的宽度
-      const maskWidth = this.$refs.mask.clientWidth;
-      // const maskWidth = this.maskWidth;
+      // const maskWidth = this.$refs.mask.clientWidth;
+      const maskWidth = this.maskWidth;
       // console.log(maskWidth);
       // 计算left
       left = offsetX - maskWidth / 2;
@@ -62,7 +62,7 @@ export default {
   },
 
   mounted() {
-    this.maskWidth = this.$refs.event.clientWidth;
+    this.maskWidth = this.$refs.event.clientWidth / 2;
   },
 };
 </script>
