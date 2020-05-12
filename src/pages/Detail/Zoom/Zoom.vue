@@ -1,11 +1,13 @@
 <template>
   <div class="spec-preview">
     <img :src="imgUrl" />
-    <div class="event"></div>
+    <div class="event" @mousemove="move" ref="event"></div>
+
+    <div class="mask" ref="mask"></div>
+
     <div class="big">
-      <img :src="bigUrl" />
+      <img :src="bigUrl" ref="big" />
     </div>
-    <div class="mask"></div>
   </div>
 </template>
 
@@ -15,6 +17,51 @@ export default {
   props: {
     bigUrl: String,
     imgUrl: String,
+  },
+
+  methods: {
+    move(event) {
+      //初始化
+      let left = 0;
+      let top = 0;
+
+      // 取出相关数据
+      // 事件的坐标(相对于事件源div的左上角)
+      const { offsetX, offsetY } = event;
+      console.log(offsetX, offsetY);
+      // mask的宽度
+      // const maskWidth = this.$refs.mask.clientWidth;
+      const maskWidth = this.maskWidth;
+
+      // 计算left
+      left = offsetX - maskWidth / 2;
+      if (left < 0) {
+        left = 0;
+      } else if (left > maskWidth) {
+        left = maskWidth;
+      }
+      // 计算top
+      top = offsetY - maskWidth / 2;
+      if (top < 0) {
+        top = 0;
+      } else if (top > maskWidth) {
+        top = maskWidth;
+      }
+
+      // 指定左侧遮罩的样式坐标
+      const maskDiv = this.$refs.mask;
+      maskDiv.style.left = left + "px";
+      maskDiv.style.top = top + "px";
+
+      // 指定右侧大图的样式坐标
+      const bigImg = this.$refs.big;
+      bigImg.style.left = -2 * left + "px";
+      bigImg.style.top = -2 * top + "px";
+    },
+  },
+
+  mounted() {
+    this.maskWidth = this.$refs.event.clientWidth;
   },
 };
 </script>
