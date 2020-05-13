@@ -433,7 +433,12 @@ export default {
           skuId,
           skuNum,
         });
-        alert("添加成功, 准备自动跳转到成功的界面");
+
+        // 跳转到添加成功的界面
+        this.$router.push({
+          path: "/addcartsuccess",
+          query: { skuNum },
+        });
       } catch (error) {
         alert(error.message);
       }
