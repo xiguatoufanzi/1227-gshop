@@ -433,6 +433,11 @@ export default {
           skuId,
           skuNum,
         });
+        // 向sessionStorage中保存skuInfo
+        window.sessionStorage.setItem(
+          "SKU_INFO_KEY",
+          JSON.stringify(this.skuInfo)
+        );
 
         // 跳转到添加成功的界面
         this.$router.push({
