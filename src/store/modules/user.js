@@ -1,9 +1,9 @@
-import { reqLogin } from "@/api";
+import { getUserTempId } from "@/utils";
 
 export default {
   state: {
     suerInfo: {},
-    y: "",
+    userTempId: getUserTempId(),
   },
   mutations: {},
   actions: {},
