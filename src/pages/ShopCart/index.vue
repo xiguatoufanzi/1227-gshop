@@ -17,6 +17,7 @@
               type="checkbox"
               name="chk_list"
               :checked="item.isChecked === 1"
+              @change="checkCartItem(item)"
             />
           </li>
           <li class="cart-list-con2">
@@ -30,14 +31,25 @@
             <span class="price">{{ item.cartPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="changeItemNum(item, -1)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
               :value="item.skuNum"
               class="itxt"
+              @change="changeItemNum(item, $event.target.value - item.skuNum)"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="changeItemNum(item, 1)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ item.cartPrice * item.skuNum }}</span>
@@ -52,7 +64,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input class="chooseAll" type="checkbox" v-model="isAllChecked" />
         <span>全选</span>
       </div>
       <div class="option">
@@ -87,10 +99,64 @@ export default {
       cartList: (state) => state.shopCart.cartList,
     }),
     ...mapGetters(["totalCount", "totalPrice"]),
+
+    //是否全选的计算属性
+    isAllChecked: {
+      get() {
+        // 判断是否是所有item的isChecked为1
+        /* return (
+          this.cartList.filter((item) => item.isChecked === 1).length ===
+          this.cartList.length
+        ); */
+        /*  return (
+          this.cartList.filter((item) => item.isChecked !== 1).length === 0
+        ); */
+        // return this.cartList.find((item) => item.isChecked === 0) === undefined;
+        // return !this.cartList.find((item) => item.isChecked === 0);
+        // return !this.cartList.some(item => item.isChecked===0)  // 是否有一个元素满足条件
+        return this.cartList.every((item) => item.isChecked === 1); // 是否所有元素都满足条件
+      },
+      async set(value) {
+        try {
+          await this.$store.dispatch("checkAllCartItems", value);
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
+      },
+    },
   },
 
   mounted() {
     this.$store.dispatch("getCartList");
+  },
+
+  methods: {
+    //改变购物项的数量
+    async changeItemNum(item, numChange) {
+      try {
+        if (item.skuNum + numChange < 1) return;
+        await this.$store.dispatch("addToCart3", {
+          skuId: item.skuId,
+          skuNum: numChange,
+        });
+        this.$store.dispatch("getCartList");
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+
+    //改变购物项勾选
+    async checkCartItem(item) {
+      const skuId = item.skuId;
+      const isChecked = item.isChecked === 1 ? 0 : 1;
+      try {
+        await this.$store.dispatch("checkCartItem", { skuId, isChecked });
+        this.$store.dispatch("getCartList");
+      } catch (error) {
+        alert(error.message);
+      }
+    },
   },
 };
 </script>
