@@ -1,4 +1,9 @@
-import { reqCartList, reqCheckCartItem, reqAddToCart } from "@/api";
+import {
+  reqCartList,
+  reqCheckCartItem,
+  reqAddToCart,
+  reqDeleteCartItem,
+} from "@/api";
 
 export default {
   state: {
@@ -72,6 +77,26 @@ export default {
       } else {
         throw new Error("添加到购物车失败");
       }
+    },
+
+    //删除购物车项目
+    async delCartItem({}, skuId) {
+      const result = await reqDeleteCartItem(skuId);
+      if (result.code !== 200) {
+        throw new Error("删除失败");
+      }
+    },
+
+    //删除所有选中项
+    async delAllCartItems({ state, dispatch }) {
+      const promises = [];
+      state.cartList.forEach((item) => {
+        if (item.isChecked === 1) {
+          const promise = dispatch("delCartItem", item.skuId);
+          promises.push(promise);
+        }
+      });
+      return Promise.all(promises);
     },
   },
 
