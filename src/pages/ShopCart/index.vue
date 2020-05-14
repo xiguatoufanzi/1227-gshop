@@ -42,7 +42,9 @@
               type="text"
               :value="item.skuNum"
               class="itxt"
-              @change="changeItemNum(item, $event.target.value - item.skuNum)"
+              @change="
+                changeItemNum(item, $event.target.value - item.skuNum, $event)
+              "
             />
             <a
               href="javascript:void(0)"
@@ -156,16 +158,21 @@ export default {
     },
 
     //改变购物项的数量
-    async changeItemNum(item, numChange) {
-      try {
-        if (item.skuNum + numChange < 1) return;
-        await this.$store.dispatch("addToCart3", {
-          skuId: item.skuId,
-          skuNum: numChange,
-        });
-        this.$store.dispatch("getCartList");
-      } catch (error) {
-        alert(error.message);
+    async changeItemNum(item, numChange, event) {
+      if (item.skuNum + numChange > 0) {
+        try {
+          await this.$store.dispatch("addToCart3", {
+            skuId: item.skuId,
+            skuNum: numChange,
+          });
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
+      } else {
+        if (event) {
+          event.target.value = item.skuNum;
+        }
       }
     },
 

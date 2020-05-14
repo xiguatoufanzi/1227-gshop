@@ -89,13 +89,20 @@ export default {
 
     //删除所有选中项
     async delAllCartItems({ state, dispatch }) {
-      const promises = [];
+      /* const promises = [];
       state.cartList.forEach((item) => {
         if (item.isChecked === 1) {
           const promise = dispatch("delCartItem", item.skuId);
           promises.push(promise);
         }
-      });
+      }); */
+
+      const promises = state.cartList.reduce((pre, item) => {
+        if (item.isChecked === 1) {
+          pre.push(dispatch("delCartItem", item.skuId));
+        }
+        return pre;
+      }, []);
       return Promise.all(promises);
     },
   },
