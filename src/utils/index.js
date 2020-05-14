@@ -23,3 +23,8 @@ export function saveUserInfo(userInfo) {
 export function getUserInfo() {
   return JSON.parse(localStorage.getItem("USER_INFO_KEY")) || {};
 }
+
+//删除local中保存的用户信息
+export function delUserInfo() {
+  localStorage.removeItem("USER_INFO_KEY");
+}

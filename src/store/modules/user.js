@@ -1,4 +1,4 @@
-import { getUserTempId, saveUserInfo, getUserInfo } from "@/utils";
+import { getUserTempId, saveUserInfo, getUserInfo, delUserInfo } from "@/utils";
 import { reqRegister, reqLogin, reqLogout } from "@/api";
 
 export default {
@@ -9,6 +9,9 @@ export default {
   mutations: {
     RECEIVE_USER_INFO(state, userInfo) {
       state.userInfo = userInfo;
+    },
+    DELETE_USER_INFO(state) {
+      state.userInfo = "";
     },
   },
   actions: {
@@ -30,6 +33,17 @@ export default {
         saveUserInfo(userInfo);
       } else {
         throw new Error(result.data || result.message || "登陆失败");
+      }
+    },
+
+    //登出
+    async Logout({ commit }) {
+      const result = await reqLogout();
+      if (result.code === 200) {
+        commit("DELETE_USER_INFO");
+        delUserInfo();
+      } else {
+        throw new Error(result.data || result.message || "登出失败");
       }
     },
   },

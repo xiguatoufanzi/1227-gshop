@@ -9,7 +9,7 @@
           <p v-if="userInfo.name">
             <span>{{ userInfo.nickName }}</span>
             &nbsp;&nbsp;&nbsp;
-            <a href="javascript:">登出</a>
+            <a href="javascript:" @click="logout">登出</a>
           </p>
 
           <p v-else>
@@ -77,6 +77,15 @@ export default {
   },
 
   methods: {
+    //登出用户
+    async logout() {
+      try {
+        await this.$store.dispatch("Logout");
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+
     search() {
       // this.$router.push(`/search/${this.searchName}`);
       let location = {

@@ -57,7 +57,9 @@
             <span class="sum">{{ item.cartPrice * item.skuNum }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet" @click="delCartItem(item)">删除</a>
+            <a href="javascript:;" class="sindelet" @click="delCartItem(item)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
