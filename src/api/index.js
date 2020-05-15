@@ -91,3 +91,7 @@ export const reqRegister = (userInfo) =>
 
 // 退出登陆
 export const reqLogout = () => ajax("/user/passport/logout");
+
+//获取我的订单列表
+export const reqMyOrders = (page, limit) =>
+  ajax(`/order/auth/${page}/${limit}`);

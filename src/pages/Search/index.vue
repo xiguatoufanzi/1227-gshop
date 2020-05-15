@@ -116,7 +116,7 @@
             :pageSize="options.pageSize"
             :total="productList.total"
             :showPageNo="3"
-            @currentChange="handlCurrentChange"
+            @currentChange="getProductList"
           />
         </div>
       </div>
@@ -188,11 +188,11 @@ export default {
     },
 
     //改变页码时的回调
-    handlCurrentChange(currentPage) {
+    /* handlCurrentChange(currentPage) {
       // 更新options中pageNo
       this.options.pageNo = currentPage;
       this.$store.dispatch("getProductList", this.options);
-    },
+    }, */
 
     //是否为当前选择项
     isActive(orderFlag) {
