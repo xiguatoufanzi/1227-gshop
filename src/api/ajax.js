@@ -21,6 +21,12 @@ instance.interceptors.request.use((config) => {
   //携带uuid
   config.headers.userTempId = store.state.user.userTempId;
   // config.headers["userTempId"] = store.state.user.userTempId;
+
+  //携带token
+  const token = store.state.user.userInfo.token;
+  if (token) {
+    config.headers["token"] = token;
+  }
   return config;
 });
 

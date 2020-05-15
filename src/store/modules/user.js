@@ -11,7 +11,7 @@ export default {
       state.userInfo = userInfo;
     },
     DELETE_USER_INFO(state) {
-      state.userInfo = "";
+      state.userInfo = {};
     },
   },
   actions: {

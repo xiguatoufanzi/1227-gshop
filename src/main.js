@@ -6,7 +6,9 @@ import store from "./store";
 import "./mock/mockServer";
 import "swiper/css/swiper.min.css";
 import Carousel from "@/components/Carousel";
-import Pagination from '@/components/Pagination'
+import Pagination from "@/components/Pagination";
+import "./mock/mockServer";
+import "./validate";
 
 Vue.component("TypeNav", TypeNav);
 Vue.component("Carousel", Carousel);
