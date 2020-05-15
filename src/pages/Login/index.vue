@@ -14,32 +14,52 @@
           </ul>
 
           <div class="content">
-            <form action="##" @submit.prevent="login">
-              <div class="input-text clearFix">
-                <span></span>
-                <input
-                  type="text"
-                  placeholder="邮箱/用户名/手机号"
-                  v-model="mobile"
-                />
-              </div>
-              <div class="input-text clearFix">
-                <span class="pwd"></span>
-                <input
-                  type="text"
-                  placeholder="请输入密码"
-                  v-model="password"
-                />
-              </div>
-              <div class="setting clearFix">
-                <label class="checkbox inline">
-                  <input name="m1" type="checkbox" />
-                  自动登录
-                </label>
-                <span class="forget">忘记密码？</span>
-              </div>
-              <button class="btn">登&nbsp;&nbsp;录</button>
-            </form>
+            <ValidationObserver ref="form">
+              <form action="##" @submit.prevent="login">
+                <div class="input-text clearFix">
+                  <span></span>
+                  <ValidationProvider
+                    name="手机号"
+                    :rules="{ required: true, regex: /^1\d{10}$/ }"
+                  >
+                    <template slot-scope="{ errors, classes }">
+                      <input
+                        type="text"
+                        placeholder="请输入你的手机号"
+                        v-model="mobile"
+                        :class="classes"
+                      />
+                      <i class="error-msg">{{ errors[0] }}</i>
+                    </template>
+                  </ValidationProvider>
+                </div>
+                <div class="input-text clearFix">
+                  <span class="pwd"></span>
+                  <ValidationProvider
+                    name="密码"
+                    :rules="{ required: true, min: 6, max: 10 }"
+                  >
+                    <template slot-scope="{ errors, classes }">
+                      <input
+                        type="password"
+                        placeholder="请输入你的登录密码"
+                        v-model="password"
+                        :class="classes"
+                      />
+                      <i class="error-msg">{{ errors[0] }}</i>
+                    </template>
+                  </ValidationProvider>
+                </div>
+                <div class="setting clearFix">
+                  <label class="checkbox inline">
+                    <input name="m1" type="checkbox" />
+                    自动登录
+                  </label>
+                  <span class="forget">忘记密码？</span>
+                </div>
+                <button class="btn">登&nbsp;&nbsp;录</button>
+              </form>
+            </ValidationObserver>
 
             <div class="call clearFix">
               <ul>
@@ -87,21 +107,26 @@ export default {
 
   methods: {
     //登陆
-    async login() {
-      const { mobile, password } = this;
-      try {
-        await this.$store.dispatch("login", { mobile, password });
-        // this.$router.replace("/");
-        const redirect = this.$route.query.redirect;
-        // 如果有redirect, 跳转到它指定的路由
-        if (redirect) {
-          this.$router.replace(redirect);
-        } else {
-          this.$router.replace("/");
+    login() {
+      this.$refs.form.validate().then(async (success) => {
+        if (!success) {
+          return;
         }
-      } catch (error) {
-        alert(error.message);
-      }
+        const { mobile, password } = this;
+        try {
+          await this.$store.dispatch("login", { mobile, password });
+          // this.$router.replace("/");
+          const redirect = this.$route.query.redirect;
+          // 如果有redirect, 跳转到它指定的路由
+          if (redirect) {
+            this.$router.replace(redirect);
+          } else {
+            this.$router.replace("/");
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      });
     },
   },
 
@@ -184,6 +209,14 @@ export default {
 
           .input-text {
             margin-bottom: 16px;
+            position: relative;
+
+            .error-msg {
+              position: absolute;
+              top: 100%;
+              left: 47px;
+              color: red;
+            }
 
             span {
               float: left;
@@ -215,6 +248,9 @@ export default {
 
               border-radius: 0 2px 2px 0;
               outline: none;
+              &.is-invalid {
+                border: 1px solid red;
+              }
             }
           }
 
