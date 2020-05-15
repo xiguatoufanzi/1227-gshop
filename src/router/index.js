@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import routes from "./routes";
+import store from "@/store";
 Vue.use(VueRouter);
 
 //解决push方法参数不变报错问题
@@ -31,10 +32,33 @@ VueRouter.prototype.replace = function(location, onComplete, onAbort) {
   }
 };
 
-export default new VueRouter({
+const router = new VueRouter({
   mode: "history",
   routes,
   scrollBehavior(to, from, savedPosition) {
     return { x: 0, y: 0 }; // 在跳转路由时, 滚动条自动滚动到x轴和y轴的起始位置
   },
 });
+
+//只有登陆了, 才能查看交易/支付/个人中心界面
+const checkPaths = ["/trade", "/pay", "/center"];
+//全局注册守卫
+router.beforeEach((to, from, next) => {
+  const targetPath = to.path;
+  //如果匹配到路径进行检查
+  const isCheckPath = !!checkPaths.find(
+    (path) => targetPath.indexOf(path) === 0
+  );
+  if (isCheckPath) {
+    //如果登陆，放行
+    if (store.state.user.userInfo.name) {
+      next();
+    } else {
+      next("/login?redirect=" + targetPath);
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;

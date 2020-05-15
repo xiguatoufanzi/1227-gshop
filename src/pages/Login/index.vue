@@ -91,11 +91,30 @@ export default {
       const { mobile, password } = this;
       try {
         await this.$store.dispatch("login", { mobile, password });
-        this.$router.replace("/");
+        // this.$router.replace("/");
+        const redirect = this.$route.query.redirect;
+        // 如果有redirect, 跳转到它指定的路由
+        if (redirect) {
+          this.$router.replace(redirect);
+        } else {
+          this.$router.replace("/");
+        }
       } catch (error) {
         alert(error.message);
       }
     },
+  },
+
+  //组件守卫
+  beforeRouteEnter(to, from, next) {
+    //未登录放行
+    next((component) => {
+      if (!component.$store.state.user.userInfo.token) {
+        next();
+      } else {
+        next("/");
+      }
+    });
   },
 };
 </script>
