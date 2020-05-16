@@ -12,6 +12,7 @@ import Center from "@/pages/Center";
 import MyOrder from "@/pages/Center/MyOrder";
 import GroupBuy from "@/pages/Center/GroupBuy";
 import store from "@/store";
+import router from ".";
 
 export default [
   //home
@@ -68,6 +69,7 @@ export default [
   {
     path: "/pay",
     component: Pay,
+    props: (route) => ({ orderId: route.query.orderId }),
 
     beforeEnter(to, from, next) {
       if (from.path === "/trade") {

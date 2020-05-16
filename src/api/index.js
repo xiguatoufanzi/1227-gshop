@@ -103,6 +103,7 @@ export const reqTradeInfo = () => ajax("/order/auth/trade");
 export const reqSubmitOrder = (tradeNo, orderInfo) =>
   ajax({
     url: "/order/auth/submitOrder",
+    method: "POST",
     params: { tradeNo },
     data: orderInfo,
   });
