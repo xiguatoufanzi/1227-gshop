@@ -118,7 +118,10 @@ export default {
         // return this.cartList.find((item) => item.isChecked === 0) === undefined;
         // return !this.cartList.find((item) => item.isChecked === 0);
         // return !this.cartList.some(item => item.isChecked===0)  // 是否有一个元素满足条件
-        return this.cartList.every((item) => item.isChecked === 1); // 是否所有元素都满足条件
+        return (
+          this.cartList.every((item) => item.isChecked === 1) &&
+          this.cartList.length > 0
+        ); // 是否所有元素都满足条件
       },
       async set(value) {
         try {

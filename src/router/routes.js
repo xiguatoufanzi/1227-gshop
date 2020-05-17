@@ -1,7 +1,8 @@
-import Home from "@/pages/Home";
+// import Home from "@/pages/Home";
+// import Search from "@/pages/Search";
+const Search = () => import("@/pages/Search");
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
-import Search from "@/pages/Search";
 import Detail from "@/pages/Detail";
 import AddCartSuccess from "@/pages/AddCartSuccess";
 import ShopCart from "@/pages/ShopCart";
@@ -18,7 +19,7 @@ export default [
   //home
   {
     path: "/",
-    component: Home,
+    component: () => import("@/pages/Home"),
   },
 
   //详情

@@ -10,6 +10,7 @@ import Pagination from "@/components/Pagination";
 import "./mock/mockServer";
 import "./validate";
 import * as API from "@/api"; // 引入所有接口请求函数并包装在API对象中
+import "./elements";
 
 // 让所有组件对象可以直接看到API对象
 Vue.prototype.$API = API;

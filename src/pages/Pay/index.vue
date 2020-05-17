@@ -115,6 +115,56 @@ export default {
         .then((url) => {
           // url就是二维码图片
           console.log(url);
+          this.$alert(`<img src="${url}">`, "请使用微信扫码支付", {
+            dangerouslyUseHTMLString: true,
+            center: true, // 居中显示
+            showClose: false, // 不显示右上角的关闭
+            showCancelButton: true, // 显示取消按钮
+            cancelButtonText: "支付中遇到了问题",
+            confirmButtonText: "我已成功支付",
+          })
+            .then(() => {
+              //点击已支付
+              this.$router.push("/paysuccess");
+              clearInterval(this.intervalId);
+            })
+            .catch(() => {
+              clearInterval(this.intervalId);
+              //点击支付有问题
+              this.$message({
+                message: "找前台妹子!",
+                type: "warning",
+              });
+            });
+
+          //获取订单支付状态
+          this.intervalId = setInterval(() => {
+            this.$API
+              .reqOrderStatus(this.orderId)
+              .then((result) => {
+                //支付成功，跳转成功界面
+                if (result.code === 200) {
+                  this.$router.push("/paysuccess");
+                  //关闭对话框
+                  this.$msgbox.close();
+                  //清除定时器
+                  clearInterval(this.intervalId);
+                  //提示支付成功
+                  this.$message.success("支付成功");
+                  //删除购物车已支付数据
+                  this.$store.dispatch("deleteCheckedCartItems");
+                }
+              })
+              .catch((error) => {
+                //清除定时器
+                clearInterval(this.intervalId);
+                //提示支付失败
+                this.$message({
+                  message: "获取订单状态失败!",
+                  type: "error",
+                });
+              });
+          }, 3000);
         })
         .catch((err) => {
           alert("生成支付二维码失败!");
