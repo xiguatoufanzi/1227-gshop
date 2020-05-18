@@ -7,10 +7,11 @@ Vue.use(ElementUI);
  */
 
 //按需引入
-import { Pagination, MessageBox, Message } from "element-ui";
+import { Pagination, MessageBox, Message, Button } from "element-ui";
 
 // 注册全局组件
 Vue.component(Pagination.name, Pagination); // <el-pagination>
+Vue.component(Button.name, Button); // <el-button>
 
 /* 
   UI组件库的2种组件
